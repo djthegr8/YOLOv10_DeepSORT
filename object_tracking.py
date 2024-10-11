@@ -38,7 +38,7 @@ def initialize_video_capture(video_input):
     return cap
 
 def initialize_model():
-    model_path = "./weights/yolov10x.pt"
+    model_path = "./weights/yolov10n.pt"
     if not os.path.exists(model_path):
         logger.error(f"Model weights not found at {model_path}")
         raise FileNotFoundError("Model weights file not found")
