@@ -13,6 +13,8 @@ from ultralytics import YOLOv10
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
+
 # Define command line flags
 flags.DEFINE_string("video", "./data/test_1.mp4", "Path to input video or webcam index (0)")
 flags.DEFINE_string("output", "./output/output.mp4", "Path to output video")
