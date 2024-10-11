@@ -144,6 +144,7 @@ def main(_argv):
                 break
             
             tracks = process_frame(frame, model, tracker, class_names, colors)
+            logger.info(tracks)
             frame = draw_tracks(frame, tracks, class_names, colors, class_counters, track_class_mapping)
             
             end = datetime.datetime.now()
