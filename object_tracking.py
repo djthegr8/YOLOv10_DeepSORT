@@ -8,6 +8,7 @@ from collections import defaultdict
 from absl import app, flags
 from deep_sort_realtime.deepsort_tracker import DeepSort
 from ultralytics import YOLOv10
+import pickle
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -136,7 +137,7 @@ def main(_argv):
         class_counters = defaultdict(int)
         track_class_mapping = {}
         frame_count = 0
-        
+        bbox_dict = {}
         while True:
             start = datetime.datetime.now()
             ret, frame = cap.read()
@@ -144,7 +145,20 @@ def main(_argv):
                 break
             
             tracks = process_frame(frame, model, tracker, class_names, colors)
-            logger.info(tracks)
+            for track in tracks:
+                if not track.is_confirmed():
+                    continue
+                track_id = track.track_id
+                ltrb = track.to_ltrb()
+                class_id = track.get_det_class()
+                x1, y1, x2, y2 = map(int, ltrb)
+                # Assign a new class-specific ID if the track_id is seen for the first time
+                if track_id not in track_class_mapping:
+                    class_counters[class_id] += 1
+                    track_class_mapping[track_id] = class_counters[class_id]
+                    bbox_dict[track_class_mapping[track_id]] = []
+                class_specific_id = track_class_mapping[track_id]
+                bbox_dict[class_specific_id].append([x1,y1,x2,y2])
             frame = draw_tracks(frame, tracks, class_names, colors, class_counters, track_class_mapping)
             
             end = datetime.datetime.now()
@@ -162,6 +176,9 @@ def main(_argv):
         logger.info("Class counts:")
         for class_id, count in class_counters.items():
             logger.info(f"{class_names[class_id]}: {count}")
+        with open('./output/dictn','wb') as f:
+            logger.info(bbox_dict)
+            pickle.dump(bbox_dict, f)
     
     except Exception as e:
         logger.exception("An error occurred during processing")
@@ -169,6 +186,7 @@ def main(_argv):
         cap.release()
         writer.release()
         cv2.destroyAllWindows()
+        
 
 if __name__ == "__main__":
     try:
