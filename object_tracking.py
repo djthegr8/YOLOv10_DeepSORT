@@ -159,7 +159,7 @@ def main(_argv):
                     track_class_mapping[track_id] = class_counters[class_id]
                     bbox_dict[track_class_mapping[track_id]] = []
                 class_specific_id = track_class_mapping[track_id]
-                bbox_dict[class_specific_id].append([x1,y1,x2,y2])
+                bbox_dict[class_specific_id].append([frame_count,x1,y1,x2,y2])
             frame = draw_tracks(frame, tracks, class_names, colors, class_counters, track_class_mapping)
             
             end = datetime.datetime.now()
