@@ -154,7 +154,7 @@ def main(_argv):
             cv2.putText(frame, fps_text, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 8)
             
             writer.write(frame)
-            #cv2.imshow("YOLOv10 Object tracking", frame)
+            cv2.imshow("YOLOv10 Object tracking", frame)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
         
