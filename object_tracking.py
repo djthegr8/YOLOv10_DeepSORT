@@ -179,7 +179,8 @@ def main(_argv):
             logger.info(f"{class_names[class_id]}: {count}")
         
         with open(FLAGS.dictn,'wb') as f:
-            logger.info(bbox_dict)
+            #logger.info(bbox_dict)
+            logger.info(f"Dumping bbox dictionary to {FLAGS.dictn}")
             pickle.dump(bbox_dict, f)
     
     except Exception as e:
