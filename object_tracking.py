@@ -19,6 +19,7 @@ os.environ["QT_QPA_PLATFORM"] = "offscreen"
 # Define command line flags
 flags.DEFINE_string("video", "./data/test_1.mp4", "Path to input video or webcam index (0)")
 flags.DEFINE_string("output", "./output/output.mp4", "Path to output video")
+flags.DEFINE_string("dictn", "dictn", "Path to pickled dictionary")
 flags.DEFINE_float("conf", 0.50, "Confidence threshold")
 flags.DEFINE_integer("blur_id", None, "Class ID to apply Gaussian Blur")
 flags.DEFINE_integer("class_id", None, "Class ID to track")
@@ -176,7 +177,8 @@ def main(_argv):
         logger.info("Class counts:")
         for class_id, count in class_counters.items():
             logger.info(f"{class_names[class_id]}: {count}")
-        with open('./output/dictn','wb') as f:
+        
+        with open(FLAGS.dictn,'wb') as f:
             logger.info(bbox_dict)
             pickle.dump(bbox_dict, f)
     
